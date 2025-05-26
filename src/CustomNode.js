@@ -4,17 +4,18 @@ import { Handle, Position } from 'reactflow';
 const CustomNode = ({ data }) => {
   const { memberData, isJoint, label } = data; // Destructure isJoint and label
 
-  // If it's a joint node (now representing a "union" node), render a specific style
+  // If it's a joint node (now representing a "union" node), render an invisible style
   if (isJoint) { // data.isJoint is true for union nodes
     return (
-      <div className="custom-node bg-gray-500 text-white rounded-md shadow-md p-1 w-10 h-10 flex flex-col items-center justify-center relative text-center">
-        {/* Handles for joint/union node */}
+      // This div is made nearly invisible but still serves as an anchor for handles.
+      // Position relative is important for the absolute positioning of handles.
+      <div style={{ width: '1px', height: '1px', opacity: 0, position: 'relative' }}>
+        {/* Handles for joint/union node. Their styles position them around this tiny div. */}
         <Handle type="target" position={Position.Top} id="top-joint" style={{ top: -5 }} isConnectable={true} />
         <Handle type="source" position={Position.Bottom} id="bottom-joint" style={{ bottom: -5 }} isConnectable={true} />
         <Handle type="target" position={Position.Left} id="left-joint" style={{ left: -5 }} isConnectable={true} />
         <Handle type="target" position={Position.Right} id="right-joint" style={{ right: -5 }} isConnectable={true} /> 
-        {/* The label for the union node */}
-        <div className="text-xs font-semibold">{label || '⚭'}</div>
+        {/* The visible label is removed. */}
       </div>
     );
   }
