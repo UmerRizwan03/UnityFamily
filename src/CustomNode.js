@@ -4,18 +4,17 @@ import { Handle, Position } from 'reactflow';
 const CustomNode = ({ data }) => {
   const { memberData, isJoint, label } = data; // Destructure isJoint and label
 
-  // If it's a joint node, render a specific style for joint nodes
-  if (isJoint) {
+  // If it's a joint node (now representing a "union" node), render a specific style
+  if (isJoint) { // data.isJoint is true for union nodes
     return (
-      <div className="custom-node bg-gray-500 text-white rounded-md shadow-md p-2 w-24 h-16 flex flex-col items-center justify-center relative text-center">
-        {/* Handles for joint node */}
+      <div className="custom-node bg-gray-500 text-white rounded-md shadow-md p-1 w-10 h-10 flex flex-col items-center justify-center relative text-center">
+        {/* Handles for joint/union node */}
         <Handle type="target" position={Position.Top} id="top-joint" style={{ top: -5 }} isConnectable={true} />
         <Handle type="source" position={Position.Bottom} id="bottom-joint" style={{ bottom: -5 }} isConnectable={true} />
         <Handle type="target" position={Position.Left} id="left-joint" style={{ left: -5 }} isConnectable={true} />
         <Handle type="target" position={Position.Right} id="right-joint" style={{ right: -5 }} isConnectable={true} /> 
-        {/* Note: Joint nodes typically don't act as a 'source' from their sides directly to other main entities in this model */}
-        {/* They are targets for partners and sources for children (from bottom) */}
-        <div className="text-xs">{label || '⚭'}</div> {/* Display label or default symbol */}
+        {/* The label for the union node */}
+        <div className="text-xs font-semibold">{label || '⚭'}</div>
       </div>
     );
   }
