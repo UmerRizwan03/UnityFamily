@@ -6,8 +6,8 @@ const nodeHeight = 140;
 const unionNodeWidth = 50; // Smaller width for union nodes
 const unionNodeHeight = 50; // Smaller height for union nodes
 const spouseSpacing = 50; 
-const nodesep = 100; 
-const ranksep = 200; 
+const nodesep = 150; // Adjusted from 100
+const ranksep = 250; // Adjusted from 200
 
 export function getLayoutedElements(initialNodes, initialEdges, relationships, direction = 'TB') {
   const dagreGraph = new dagre.graphlib.Graph();
