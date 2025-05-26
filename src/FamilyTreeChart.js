@@ -12,8 +12,11 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 import { motion } from 'framer-motion';
 import CustomNode from './CustomNode';
+import { getLayoutedElements } from './GetLayoutedElements'; // Updated import
+import CustomElbowEdge from './CustomElbowEdge'; // Import for edge type
 
 const nodeTypes = { custom: CustomNode };
+const edgeTypes = { customElbow: CustomElbowEdge }; // Define edgeTypes
 
 const AnimatedReactFlow = ({ nodes, edges, onNodesChange, onEdgesChange }) => (
   <motion.div
@@ -28,6 +31,7 @@ const AnimatedReactFlow = ({ nodes, edges, onNodesChange, onEdgesChange }) => (
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       nodeTypes={nodeTypes}
+      edgeTypes={edgeTypes} // Pass edgeTypes to ReactFlow
       fitView
       className="family-tree-flow"
       connectionLineStyle={{ stroke: 'var(--color-accent-primary)' }}
@@ -39,23 +43,34 @@ const AnimatedReactFlow = ({ nodes, edges, onNodesChange, onEdgesChange }) => (
   </motion.div>
 );
 
-const FamilyTreeChart = ({ initialNodes, initialEdges }) => {
-  const [nodes, setNodes] = useState(initialNodes);
-  const [edges, setEdges] = useState(initialEdges);
+// Added relationships prop
+const FamilyTreeChart = ({ initialNodes, initialEdges, relationships }) => {
+  // Use useMemo to calculate layout only when inputs change
+  const { nodes: layoutedNodes, edges: layoutedEdges } = useMemo(() => {
+    // Provide default empty arrays if props are undefined
+    const currentNodes = initialNodes || [];
+    const currentRelationships = relationships || [];
+    // initialEdges might not be directly used by getLayoutedElements for dagre graph if relationships are primary source
+    // but it's kept for now as per function signature. The new getLayoutedElements primarily uses relationships.
+    return getLayoutedElements(currentNodes, initialEdges || [], currentRelationships, 'TB');
+  }, [initialNodes, initialEdges, relationships]);
+
+  const [nodes, setNodes] = useState(layoutedNodes);
+  const [edges, setEdges] = useState(layoutedEdges);
 
   useEffect(() => {
-    setNodes(initialNodes);
-    setEdges(initialEdges);
-  }, [initialNodes, initialEdges]);
+    setNodes(layoutedNodes);
+    setEdges(layoutedEdges);
+  }, [layoutedNodes, layoutedEdges]);
 
   const onNodesChange = useCallback(
     (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
-    []
+    [setNodes] // Added setNodes to dependency array
   );
 
   const onEdgesChange = useCallback(
     (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
-    []
+    [setEdges] // Added setEdges to dependency array
   );
 
   return (
