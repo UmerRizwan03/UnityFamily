@@ -1,0 +1,191 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import '~@fortawesome/fontawesome-free/css/all.min.css';
+
+@layer base {
+  :root {
+    /* ... other variables ... */
+    --color-accent-primary: theme('colors.accent.primary');
+    --color-accent-secondary: theme('colors.accent.secondary');
+    --color-neutral-300: theme('colors.neutral.300');
+    --color-neutral-500: theme('colors.neutral.500');
+    --color-neutral-700: theme('colors.neutral.700');
+    --color-neutral-800: theme('colors.neutral.800');
+    --rgb-neutral-900: <r_val> <g_val> <b_val>; /* Replace with actual RGB values for neutral-900 */
+  }
+
+  html {
+    font-family: Inter, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    @apply bg-[var(--color-bg-primary)] text-[var(--color-text-primary)];
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    /* Removed explicit bg and text colors, will inherit from html */
+  }
+
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+    @apply bg-neutral-800 text-accent-secondary px-1 py-0.5 rounded-sm text-sm;
+  }
+
+  /* Modern Scrollbar for Dark Theme */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-neutral-800 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-accent-primary/70 rounded-full border-2 border-neutral-800;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-accent-primary;
+  }
+
+  /* Selection highlight */
+  ::selection {
+    @apply bg-accent-primary/50 text-white;
+  }
+}
+
+@layer components {
+  .form-input-modern {
+    @apply block w-full px-4 py-2.5 text-sm text-neutral-100 bg-neutral-700 border border-neutral-600 rounded-lg 
+    focus:ring-2 focus:ring-accent-primary focus:border-accent-primary 
+    transition-all duration-150 ease-in-out 
+    placeholder-neutral-400 shadow-inner-glow;
+  }
+
+  .form-input-modern:not(textarea):not([type='date']) {
+    /* Remove or adjust this line to change the dropdown appearance */
+    /* background-image: url("data:image/svg+xml,..."); */
+    @apply pr-10;
+}
+
+  .glass-card {
+    /* Adjust for dark theme, maybe less transparency or different base color */
+    @apply bg-neutral-800/70 backdrop-blur-md rounded-xl shadow-lg transition-all duration-300 border border-neutral-700;
+  }
+
+  .glass-card:hover {
+    @apply shadow-glow-primary transform scale-[1.02]; /* Example glow on hover */
+  }
+
+  .btn {
+    @apply px-6 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-neutral-900 transition-all duration-200 ease-in-out font-semibold text-sm;
+  }
+
+  .btn-primary {
+    @apply btn bg-accent-primary text-white hover:bg-opacity-80 focus:ring-accent-primary shadow-md hover:shadow-lg;
+  }
+
+  .btn-secondary {
+    @apply btn bg-neutral-700 text-neutral-100 hover:bg-neutral-600 focus:ring-accent-primary border border-neutral-600 shadow-sm hover:shadow-md;
+  }
+
+  .btn-ghost {
+    @apply btn text-accent-primary hover:bg-accent-primary/10 focus:ring-accent-primary;
+  }
+
+  /* Example of a button with a glow effect */
+  .btn-glow {
+    @apply btn-primary relative overflow-hidden;
+  }
+  .btn-glow::before {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: radial-gradient(circle, theme('colors.glow.primary') 0%, transparent 70%);
+    animation: pulseGlowBefore 2s infinite ease-in-out alternate;
+  }
+  .btn-glow:hover::before {
+    opacity: 1;
+  }
+
+  @keyframes pulseGlowBefore {
+    0% { transform: scale(0.8); opacity: 0.5; }
+    100% { transform: scale(1.2); opacity: 0.8; }
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent-primary to-accent-secondary;
+  }
+
+  .bg-gradient-soft-dark {
+    @apply bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900;
+  }
+
+  /* Animation utilities */
+  /* Ensure .animate-fade-in was removed or commented out as previously suggested */
+
+  /* Remove or comment out the following problematic class: */
+  /*
+  .animate-slide-up {
+    @apply animate-slide-up; 
+  }
+  */
+
+  /* Glow utility */
+  .apply-glow {
+    --glow-color: var(--glow-color-default); /* Use CSS variable */
+    box-shadow: 0 0 8px 2px var(--glow-color), 0 0 15px 5px var(--glow-color-default) inset; /* Example glow */
+    /* For a pulsing glow, you might need a more complex setup or a dedicated animation */
+  }
+  .apply-pulse-glow {
+    --glow-color: var(--glow-color-default);
+    animation: pulseGlow 2s infinite ease-in-out;
+  }
+
+  /* Add more specific glow utilities if needed, e.g., for text */
+  .text-glow-primary {
+    text-shadow: 0 0 5px theme('colors.glow.primary'), 0 0 10px theme('colors.glow.primary');
+  }
+  .text-glow-secondary {
+    text-shadow: 0 0 5px theme('colors.glow.secondary'), 0 0 10px theme('colors.glow.secondary');
+  }
+}
+
+/* Assuming your main content container has a class like 'main-content' */
+.main-content {
+  /* Add padding-top equal to the navbar height to prevent content from being hidden */
+  padding-top: 80px; /* Adjust this value to match your navbar's height (h-20 = 80px) */
+
+  /* Removed the gradient mask properties */
+}
+
+/* Target the scrollbar */
+::-webkit-scrollbar {
+  width: 8px; /* Adjust width as needed */
+}
+
+/* Target the scrollbar track */
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1); /* Subtle transparent track */
+  border-radius: 10px;
+}
+
+/* Target the scrollbar thumb (the draggable part) */
+::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.5); /* Semi-transparent accent color */
+  border-radius: 10px;
+  transition: background 0.3s ease; /* Smooth transition on hover */
+}
+
+/* Change thumb color on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.8); /* More opaque on hover */
+}
+
+/* For Firefox (less control than webkit) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(139, 92, 246, 0.5) rgba(0, 0, 0, 0.1);
+}
